@@ -28,25 +28,31 @@ bool Si7021_IsIDLE_Humidity(Si7021 * mySensor)
 
 float Si7021_GetData(float * temp, float * hum, Si7021 * mySensor) // get relative humidity and temperature
 {
-	// buffers for storing data
+	// buffers for storing data and unions
+	Data data_hum;
 	uint8_t buf_hum[2];
+	Data data_temp;
 	uint8_t buf_temp[2];
 
 	// HAL transmit and receive for humidity
 	HAL_I2C_Master_Transmit(mySensor->i2c_handle, mySensor->address, &MEASURE_HUMIDITY, 1, HAL_MAX_DELAY);
 	HAL_I2C_Master_Receive(mySensor->i2c_handle, mySensor->address, &buf_hum, 2, HAL_MAX_DELAY);
 
-	// merging data into a packet for humidity
-	uint16_t packet_hum = (buf_hum[0] << 8) & 0xff00; // MSB is in buf[0]
-	packet_hum |= buf_hum[1] & 0x00ff; // LSB is in buf[1]
+	// putting data into the union
+	data_hum.DataMembers.LowBits = buf_hum[1];
+	data_hum.DataMembers.HighBits = buf_hum[0];
 
-	// HAL transmit and receive
+	// HAL transmit and receive the previous temperature so you save time
 	HAL_I2C_Master_Transmit(mySensor->i2c_handle, mySensor->address, &READ_PREVIOUS , 1, HAL_MAX_DELAY);
 	HAL_I2C_Master_Receive(mySensor->i2c_handle, mySensor->address, &buf_temp, 2, HAL_MAX_DELAY);
 
-	// merging data into a packet for previous temperature
-	uint16_t packet_temp = (buf_temp[0] << 8) & 0xff00; // MSB is in buf[0]
-	packet_temp |= buf_temp[1] & 0x00ff; // LSB is in buf[1]
+	// putting data into the union
+	data_temp.DataMembers.LowBits = buf_temp[1];
+	data_temp.DataMembers.HighBits = buf_temp[0];
+
+	// getting already merged data from union
+	uint16_t packet_hum = data_hum.u16data;
+	uint16_t packet_temp = data_temp.u16data;
 
 	// getting the real readable numbers into the variable that were passed by reference
 	*hum = (125.0 * (float)packet_hum) / 65536.0 - 6.0;

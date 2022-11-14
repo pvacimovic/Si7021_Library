@@ -1,10 +1,10 @@
 ../Lib/si7021.c:13:6:Si7021_Reset	24	static
 ../Lib/si7021.c:19:6:Si7021_IsIDLE_Temperature	16	static
 ../Lib/si7021.c:24:6:Si7021_IsIDLE_Humidity	16	static
-../Lib/si7021.c:29:7:Si7021_GetData	48	static
-../Lib/si7021.c:59:7:Si7021_GetTemp	40	static
-../Lib/si7021.c:77:7:Si7021_GetRelHum	40	static
-../Lib/si7021.c:98:6:Si7021_Start_NoHold_Temp	24	static
-../Lib/si7021.c:106:7:Si7021_Get_NoHold_Temp	40	static
-../Lib/si7021.c:127:6:Si7021_Start_NoHold_Hum	24	static
-../Lib/si7021.c:135:7:Si7021_Get_NoHold_Hum	40	static
+../Lib/si7021.c:29:7:Si7021_GetData	56	static
+../Lib/si7021.c:65:7:Si7021_GetTemp	40	static
+../Lib/si7021.c:83:7:Si7021_GetRelHum	40	static
+../Lib/si7021.c:104:6:Si7021_Start_NoHold_Temp	24	static
+../Lib/si7021.c:112:7:Si7021_Get_NoHold_Temp	40	static
+../Lib/si7021.c:133:6:Si7021_Start_NoHold_Hum	24	static
+../Lib/si7021.c:141:7:Si7021_Get_NoHold_Hum	40	static

@@ -104,6 +104,8 @@ int main(void)
 
   Si7021_Reset(&Sensor);
 
+  uint8_t mode;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -114,18 +116,31 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	Si7021_Start_NoHold_Temp(&Sensor);
-	Si7021_Start_NoHold_Hum(&Sensor);
-
-	HAL_Delay(25); // this is just example, you need some time to pass, at least 25ms for both sensors to read
-
 	float temp;
 	float hum;
 
-	if(!Si7021_IsIDLE_Temperature(&Sensor)) temp = Si7021_Get_NoHold_Temp(&Sensor);
-	if(!Si7021_IsIDLE_Humidity(&Sensor)) hum = Si7021_Get_NoHold_Hum(&Sensor);
+	// change this mode
+	mode = 0; // 0 for getting data, 1 for hold mode, 2 for no hold mode
 
-	//Si7021_GetData(&temp, &hum, &Sensor);
+	if(mode == 0)
+	{
+		Si7021_GetData(&temp, &hum, &Sensor);
+	}
+	else if(mode == 1)
+	{
+		temp = Si7021_GetTemp(&Sensor);
+		hum = Si7021_GetRelHum(&Sensor);
+	}
+	else if(mode == 2)
+	{
+		Si7021_Start_NoHold_Temp(&Sensor);
+		Si7021_Start_NoHold_Hum(&Sensor);
+
+		HAL_Delay(25); // this is just example, you need some time to pass, at least 25ms for both sensors to read
+
+		if(!Si7021_IsIDLE_Temperature(&Sensor)) temp = Si7021_Get_NoHold_Temp(&Sensor);
+	}
+
 
 	// for displaying it, for UART
 	char temperature[20]; //size of the number

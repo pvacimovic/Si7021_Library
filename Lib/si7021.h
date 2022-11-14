@@ -30,7 +30,7 @@ const static uint8_t RESET_SENSOR = 0xFE; // reset
 typedef struct
 {
 
-	uint8_t address; //0x40 (8 bit) -> requires shifting for 7 bit
+	uint8_t address; //0x40 (8 bit) -> requires shifting to get 7 bit
 
 	I2C_HandleTypeDef * i2c_handle;
 
@@ -41,6 +41,22 @@ typedef struct
 } Si7021;
 
 //**********************************************************************
+// union for data
+
+typedef union
+{
+	uint16_t u16data;
+
+	struct u8data
+	{
+		uint8_t LowBits;
+		uint8_t HighBits;
+
+	} DataMembers;
+
+} Data;
+
+//**********************************************************************
 // function prototypes
 
 bool Si7021_IsIDLE_Temperature(Si7021 *);
@@ -48,7 +64,7 @@ bool Si7021_IsIDLE_Humidity(Si7021 *);
 
 void Si7021_Reset(Si7021 *);
 
-float Si7021_GetData(float *, float *, Si7021 *); // get relative humidity and temperature
+float Si7021_GetData(float *, float *, Si7021 *); // get relative humidity and temperature (unions added)
 
 // hold master mode
 float Si7021_GetTemp(Si7021 *); // get only temperature
